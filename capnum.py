@@ -30,7 +30,7 @@ class VisKeys():
             print('Error: Unable to open the LED indicator inputs. Make sure you are in "input" group.')
             sys.exit(1)
 
-    def findleds(self):
+    def findleds(self) -> dict:
         ''' returns viable set of LEDs to watch.'''
         wanted = []
         for x in os.listdir(LED_DIR):
