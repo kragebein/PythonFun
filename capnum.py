@@ -8,11 +8,11 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GtkLayerShell', '0.1')
 from gi.repository import Gtk, GtkLayerShell, GLib
 
-# This folder needs to exist, and this is the folder we use to check LED status.
+# This folder needs to exist, and this is the folder we use to check LED status. end with /
 LED_DIR = '/sys/class/leds/'
 
 # This is the LED keys we want to look for. 
-KEYS = ['numlock', 'capslock', 'kbd_backlight', 'compose', 'scrolllock']
+KEYS = ['numlock', 'capslock', 'kbd_backlight', 'scrolllock']
 
 
 class VisKeys():
@@ -30,7 +30,7 @@ class VisKeys():
             print('Error: Unable to open the LED indicator inputs. Make sure you are in "input" group.')
             sys.exit(1)
 
-    def findleds(self) -> dict:
+    def findleds(self):
         ''' returns viable set of LEDs to watch.'''
         wanted = []
         for x in os.listdir(LED_DIR):
@@ -46,6 +46,8 @@ class VisKeys():
                     final[x[1]] = (path)
                 else:
                     print(f'warn: skipped {x[1]} keys as it doesnt have a LED brightness indicator')
+        if len(final) == 0:
+            raise FileNotFoundError(f'Unable to locate any LEDS in {LED_DIR} folder.')
         print(f'Found these indicators: \n{[final[k] for k in final]}')
         return final
 
